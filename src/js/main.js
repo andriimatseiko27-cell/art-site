@@ -3,7 +3,7 @@ import "../css/styles.css";
 const base = import.meta.env.BASE_URL;
 
 async function loadPartial(id, file) {
-  const res = await fetch(`${base}src/partials/${file}`);
+  const res = await fetch(`${base}partials/${file}`);
 
   if (!res.ok) {
     throw new Error(`Failed to load partial: ${file}`);
