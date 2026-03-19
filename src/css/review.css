@@ -1,3 +1,8 @@
+.review .container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .review {
   padding: 110px 0;
   background: #f5f6f8;
@@ -25,7 +30,7 @@
 }
 
 .review-swiper {
-  overflow: visible;
+  overflow: hidden;
 }
 
 .review-grid {
@@ -60,8 +65,10 @@
 }
 
 .review-controls {
-  position: relative;
   margin-top: 42px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .review-pagination {
@@ -83,12 +90,9 @@
 }
 
 .review-arrows {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   gap: 16px;
+  margin-left: auto;
 }
 
 .review-arrow {
@@ -117,6 +121,11 @@
 }
 
 @media (max-width: 992px) {
+  .review .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
   .review-title {
     font-size: 42px;
   }
@@ -136,6 +145,11 @@
 }
 
 @media (max-width: 767px) {
+  .review .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   .review {
     padding: 80px 0;
   }
@@ -158,15 +172,59 @@
   }
 
   .review-controls {
-    margin-top: 32px;
     flex-direction: column;
+    align-items: stretch;
     gap: 22px;
-    align-items: flex-start;
+    margin-top: 32px;
   }
 
-  .review-arrow {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+  .review-arrows {
+    margin-left: auto;
+    width: max-content;
   }
+}
+
+.review-animate {
+  opacity: 1;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.js .review-animate {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.js .review-animate.review-left {
+  transform: translateX(-60px);
+}
+
+.js .review-animate.review-right {
+  transform: translateX(60px);
+}
+
+.js .review-animate.review-up {
+  transform: translateY(50px);
+}
+
+.js .review-animate.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.review-title.review-animate {
+  transition-delay: 0.1s;
+}
+
+.review-subtitle.review-animate {
+  transition-delay: 0.25s;
+}
+
+.review-card.review-animate:nth-child(1) {
+  transition-delay: 0.35s;
+}
+
+.review-card.review-animate:nth-child(2) {
+  transition-delay: 0.5s;
 }

@@ -33,9 +33,56 @@ async function initPage() {
   initServices();
   initAboutAnimation();
   initReviewSwiper();
+  initReviewAnimation();
   initActiveNav();
+  initMobileMenu();
 }
 
+function initMobileMenu() {
+  const burger = document.querySelector(".burger");
+  const mobileMenu = document.querySelector(".mobile-menu");
+  const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+  if (!burger || !mobileMenu) return;
+
+  function openMenu() {
+    burger.classList.add("is-open");
+    mobileMenu.classList.add("active");
+    document.body.style.overflow = "hidden"; // 🔥
+  }
+
+  function closeMenu() {
+    burger.classList.remove("is-open");
+    mobileMenu.classList.remove("active");
+    document.body.style.overflow = ""; // 🔥
+  }
+  burger.addEventListener("click", () => {
+    const isOpen = burger.classList.contains("is-open");
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  mobileMenu.addEventListener("click", (event) => {
+    if (event.target === mobileMenu) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && mobileMenu.classList.contains("active")) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      closeMenu();
+    }
+  });
+}
 // ===== GALLERY SWIPER =====
 function initGallerySwiper() {
   const gallerySwiperEl = document.querySelector(".gallery-swiper");
@@ -438,3 +485,55 @@ function initReviewSwiper() {
 initPage().catch((error) => {
   console.error("Page init failed:", error);
 });
+
+document.documentElement.classList.add("js");
+
+const reviewItems = document.querySelectorAll(".review-animate");
+
+if (reviewItems.length) {
+  const reviewObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px",
+    },
+  );
+
+  reviewItems.forEach((item) => {
+    reviewObserver.observe(item);
+  });
+}
+
+function initReviewAnimation() {
+  document.documentElement.classList.add("js");
+
+  const reviewItems = document.querySelectorAll(".review-animate");
+
+  if (!reviewItems.length) return;
+
+  const reviewObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px",
+    },
+  );
+
+  reviewItems.forEach((item) => {
+    reviewObserver.observe(item);
+  });
+}
