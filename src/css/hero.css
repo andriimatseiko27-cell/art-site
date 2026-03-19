@@ -3,7 +3,7 @@
   min-height: 760px;
   display: flex;
   align-items: center;
-  background-image: url("img/hero.jpg");
+  background-image: url("/art-site/img/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
