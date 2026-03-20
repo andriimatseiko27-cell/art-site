@@ -21,13 +21,19 @@
   --radius: 12px;
   --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 
-  --header-bg: rgba(1, 20, 66, 0.7); /* #0F172A з прозорістю */
+  --header-bg: rgba(1, 20, 66, 0.7);
   --header-bg-strong: rgba(0, 2, 5, 0.9);
 }
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -36,12 +42,43 @@ body {
   color: var(--text-color);
   background-color: var(--white);
   padding-top: 80px;
+  overflow-x: hidden;
 }
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  /* padding: 0 20px; 🔥 ключ */
+  padding-left: 20px;
+  padding-right: 20px;
 }
-html {
-  scroll-behavior: smooth;
+
+/* mobile 320-374 */
+@media (max-width: 374px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* tablet 768+ */
+@media (min-width: 768px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* desktop 1440+ */
+@media (min-width: 1440px) {
+  .container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
 }

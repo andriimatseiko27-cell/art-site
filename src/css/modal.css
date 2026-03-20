@@ -26,7 +26,48 @@
   color: #fff;
   box-sizing: border-box;
 }
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
 
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.modal-close:hover {
+  background: rgba(246, 139, 31, 0.2);
+  box-shadow: 0 0 12px rgba(246, 139, 31, 0.4);
+  transform: rotate(90deg) scale(1.05);
+}
+
+.modal-close:active {
+  transform: scale(0.95);
+}
+.modal-close-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+}
 .modal-form-wrap.is-hidden,
 .modal-success.is-hidden {
   display: none;

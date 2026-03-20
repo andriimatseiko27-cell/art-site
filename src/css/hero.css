@@ -1,13 +1,17 @@
+/* ===== HERO ===== */
 .hero {
   position: relative;
   min-height: 760px;
   display: flex;
   align-items: center;
+
   background-image: url("/art-site/img/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
   overflow: hidden;
+  overflow-x: hidden;
 }
 
 .hero::before {
@@ -44,6 +48,7 @@
 }
 
 .hero-content {
+  width: 100%;
   max-width: 560px;
   padding-top: 120px;
   padding-bottom: 120px;
@@ -51,38 +56,47 @@
 
 .hero-title {
   margin: 0 0 24px;
-  font-size: 72px;
-  line-height: 1.05;
-  font-weight: 700;
-  letter-spacing: -0.02em;
   color: var(--white);
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  word-break: break-word;
 }
 
 .hero-text {
   margin: 0 0 36px;
-  font-size: 24px;
-  line-height: 1.4;
-  font-weight: 400;
   color: rgba(255, 255, 255, 0.9);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .hero-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   min-width: 260px;
   min-height: 76px;
   padding: 20px 32px;
+
+  box-sizing: border-box;
+
   border: none;
   border-radius: 20px;
-  background: var(--primary-color);
+
+  background-color: var(--primary-color);
   color: var(--white);
   text-decoration: none;
+
   font-size: 20px;
   font-weight: 600;
   line-height: 1;
+
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(246, 139, 31, 0.28);
+
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease,
@@ -95,6 +109,7 @@
   box-shadow: 0 16px 36px rgba(246, 139, 31, 0.36);
 }
 
+/* ===== LAPTOP / SMALL DESKTOP ===== */
 @media (max-width: 1199px) {
   .hero {
     min-height: 680px;
@@ -124,6 +139,7 @@
   }
 }
 
+/* ===== TABLET ===== */
 @media (max-width: 991px) {
   .hero {
     min-height: 620px;
@@ -170,6 +186,7 @@
   }
 }
 
+/* ===== MOBILE ===== */
 @media (max-width: 767px) {
   .hero {
     min-height: 560px;
@@ -200,6 +217,7 @@
   }
 
   .hero-content {
+    width: 100%;
     max-width: 100%;
     padding-top: 88px;
     padding-bottom: 72px;
@@ -218,15 +236,19 @@
   }
 
   .hero-btn {
+    display: flex;
     width: 100%;
     min-width: 0;
     min-height: 58px;
     padding: 16px 24px;
     border-radius: 16px;
     font-size: 17px;
+    white-space: normal;
+    text-align: center;
   }
 }
 
+/* ===== SMALL MOBILE ===== */
 @media (max-width: 479px) {
   .hero {
     min-height: 520px;

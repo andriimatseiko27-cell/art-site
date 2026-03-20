@@ -314,7 +314,7 @@ function initModal() {
   });
 
   if (form) {
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       if (!form.checkValidity()) {
@@ -322,221 +322,251 @@ function initModal() {
         return;
       }
 
-      if (formWrap && successMessage) {
-        formWrap.classList.add("is-hidden");
-        successMessage.classList.remove("is-hidden");
-      }
+      const formData = new FormData(form);
 
-      const container = document.getElementById("lottie-success");
+      const payload = {
+        name: formData.get("name")?.toString().trim(),
+        phone: formData.get("phone")?.toString().trim(),
+        message: formData.get("message")?.toString().trim(),
+      };
 
-      if (container && typeof lottie !== "undefined") {
-        if (!lottieInstance) {
-          lottieInstance = lottie.loadAnimation({
-            container,
-            renderer: "svg",
-            loop: false,
-            autoplay: true,
-            path: "https://assets10.lottiefiles.com/packages/lf20_jbrw3hcz.json",
-          });
-        } else {
-          lottieInstance.goToAndPlay(0, true);
+      try {
+        const response = await fetch(
+          "https://profound-platypus-9ee14f.netlify.app/.netlify/functions/send-telegram",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Failed to send request");
         }
-      }
 
-      form.reset();
+        if (formWrap && successMessage) {
+          formWrap.classList.add("is-hidden");
+          successMessage.classList.remove("is-hidden");
+        }
 
-      setTimeout(() => {
-        closeModal();
-      }, 3000);
-    });
-  }
-}
+        const container = document.getElementById("lottie-success");
 
-// ===== ACTIVE NAV =====
-function initActiveNav() {
-  const sections = document.querySelectorAll(
-    "#hero, #services, #about, #gallery, #review, #footer",
-  );
-  const navLinks = document.querySelectorAll(".nav-link");
+        if (container && typeof lottie !== "undefined") {
+          if (!lottieInstance) {
+            lottieInstance = lottie.loadAnimation({
+              container,
+              renderer: "svg",
+              loop: false,
+              autoplay: true,
+              path: "https://assets10.lottiefiles.com/packages/lf20_jbrw3hcz.json",
+            });
+          } else {
+            lottieInstance.goToAndPlay(0, true);
+          }
+        }
 
-  if (!sections.length || !navLinks.length) return;
+        form.reset();
 
-  function updateActiveLink() {
-    let current = "";
-
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 140;
-      const sectionHeight = section.offsetHeight;
-
-      if (
-        window.scrollY >= sectionTop &&
-        window.scrollY < sectionTop + sectionHeight
-      ) {
-        current = section.getAttribute("id");
-      }
-    });
-
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
-
-      if (link.getAttribute("href") === `#${current}`) {
-        link.classList.add("active");
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+      } catch (error) {
+        console.error("Form submit error:", error);
+        alert("Something went wrong. Please try again.");
       }
     });
   }
 
-  updateActiveLink();
-  window.addEventListener("scroll", updateActiveLink);
-}
+  // ===== ACTIVE NAV =====
+  function initActiveNav() {
+    const sections = document.querySelectorAll(
+      "#hero, #services, #about, #gallery, #review, #footer",
+    );
+    const navLinks = document.querySelectorAll(".nav-link");
 
-// ===== SERVICES =====
-function initServices() {
-  const serviceCards = document.querySelectorAll(".service-card");
-  const serviceToggleButtons = document.querySelectorAll(
-    "[data-service-toggle]",
-  );
+    if (!sections.length || !navLinks.length) return;
 
-  serviceToggleButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const card = button.closest(".service-card");
-      if (!card) return;
+    function updateActiveLink() {
+      let current = "";
 
-      card.classList.toggle("is-open");
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 140;
+        const sectionHeight = section.offsetHeight;
 
-      button.textContent = card.classList.contains("is-open")
-        ? "Show Less"
-        : "Learn More";
+        if (
+          window.scrollY >= sectionTop &&
+          window.scrollY < sectionTop + sectionHeight
+        ) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === `#${current}`) {
+          link.classList.add("active");
+        }
+      });
+    }
+
+    updateActiveLink();
+    window.addEventListener("scroll", updateActiveLink);
+  }
+
+  // ===== SERVICES =====
+  function initServices() {
+    const serviceCards = document.querySelectorAll(".service-card");
+    const serviceToggleButtons = document.querySelectorAll(
+      "[data-service-toggle]",
+    );
+
+    serviceToggleButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const card = button.closest(".service-card");
+        if (!card) return;
+
+        card.classList.toggle("is-open");
+
+        button.textContent = card.classList.contains("is-open")
+          ? "Show Less"
+          : "Learn More";
+      });
     });
-  });
 
-  if (!serviceCards.length) return;
+    if (!serviceCards.length) return;
 
-  const servicesObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
+    const servicesObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add("is-visible");
+            }, index * 120);
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+      },
+    );
+
+    serviceCards.forEach((card) => {
+      servicesObserver.observe(card);
+    });
+  }
+
+  // ===== ABOUT =====
+  function initAboutAnimation() {
+    document.documentElement.classList.add("js");
+
+    const aboutItems = document.querySelectorAll(".about-animate");
+
+    if (!aboutItems.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-          }, index * 120);
-
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.2,
-    },
-  );
-
-  serviceCards.forEach((card) => {
-    servicesObserver.observe(card);
-  });
-}
-
-// ===== ABOUT =====
-function initAboutAnimation() {
-  document.documentElement.classList.add("js");
-
-  const aboutItems = document.querySelectorAll(".about-animate");
-
-  if (!aboutItems.length) return;
-
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          obs.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: "0px 0px -40px 0px",
-    },
-  );
-
-  aboutItems.forEach((item) => {
-    observer.observe(item);
-  });
-}
-
-// ===== REVIEW SWIPER =====
-function initReviewSwiper() {
-  const reviewSwiperEl = document.querySelector(".review-swiper");
-
-  if (reviewSwiperEl && typeof Swiper !== "undefined") {
-    new Swiper(".review-swiper", {
-      loop: true,
-      slidesPerView: 1,
-      speed: 700,
-      spaceBetween: 24,
-
-      pagination: {
-        el: ".review-pagination",
-        clickable: true,
+            obs.unobserve(entry.target);
+          }
+        });
       },
-
-      navigation: {
-        nextEl: ".review-next",
-        prevEl: ".review-prev",
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -40px 0px",
       },
+    );
+
+    aboutItems.forEach((item) => {
+      observer.observe(item);
     });
   }
-}
 
-initPage().catch((error) => {
-  console.error("Page init failed:", error);
-});
+  // ===== REVIEW SWIPER =====
+  function initReviewSwiper() {
+    const reviewSwiperEl = document.querySelector(".review-swiper");
 
-document.documentElement.classList.add("js");
+    if (reviewSwiperEl && typeof Swiper !== "undefined") {
+      new Swiper(".review-swiper", {
+        loop: true,
+        slidesPerView: 1,
+        speed: 700,
+        spaceBetween: 24,
 
-const reviewItems = document.querySelectorAll(".review-animate");
+        pagination: {
+          el: ".review-pagination",
+          clickable: true,
+        },
 
-if (reviewItems.length) {
-  const reviewObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
+        navigation: {
+          nextEl: ".review-next",
+          prevEl: ".review-prev",
+        },
       });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px",
-    },
-  );
+    }
+  }
 
-  reviewItems.forEach((item) => {
-    reviewObserver.observe(item);
+  initPage().catch((error) => {
+    console.error("Page init failed:", error);
   });
-}
 
-function initReviewAnimation() {
   document.documentElement.classList.add("js");
 
   const reviewItems = document.querySelectorAll(".review-animate");
 
-  if (!reviewItems.length) return;
+  if (reviewItems.length) {
+    const reviewObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
+      },
+    );
 
-  const reviewObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px",
-    },
-  );
+    reviewItems.forEach((item) => {
+      reviewObserver.observe(item);
+    });
+  }
 
-  reviewItems.forEach((item) => {
-    reviewObserver.observe(item);
-  });
+  function initReviewAnimation() {
+    document.documentElement.classList.add("js");
+
+    const reviewItems = document.querySelectorAll(".review-animate");
+
+    if (!reviewItems.length) return;
+
+    const reviewObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
+      },
+    );
+
+    reviewItems.forEach((item) => {
+      reviewObserver.observe(item);
+    });
+  }
 }
