@@ -380,193 +380,192 @@ function initModal() {
       }
     });
   }
+}
+// ===== ACTIVE NAV =====
+function initActiveNav() {
+  const sections = document.querySelectorAll(
+    "#hero, #services, #about, #gallery, #review, #footer",
+  );
+  const navLinks = document.querySelectorAll(".nav-link");
 
-  // ===== ACTIVE NAV =====
-  function initActiveNav() {
-    const sections = document.querySelectorAll(
-      "#hero, #services, #about, #gallery, #review, #footer",
-    );
-    const navLinks = document.querySelectorAll(".nav-link");
+  if (!sections.length || !navLinks.length) return;
 
-    if (!sections.length || !navLinks.length) return;
+  function updateActiveLink() {
+    let current = "";
 
-    function updateActiveLink() {
-      let current = "";
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop - 140;
+      const sectionHeight = section.offsetHeight;
 
-      sections.forEach((section) => {
-        const sectionTop = section.offsetTop - 140;
-        const sectionHeight = section.offsetHeight;
-
-        if (
-          window.scrollY >= sectionTop &&
-          window.scrollY < sectionTop + sectionHeight
-        ) {
-          current = section.getAttribute("id");
-        }
-      });
-
-      navLinks.forEach((link) => {
-        link.classList.remove("active");
-
-        if (link.getAttribute("href") === `#${current}`) {
-          link.classList.add("active");
-        }
-      });
-    }
-
-    updateActiveLink();
-    window.addEventListener("scroll", updateActiveLink);
-  }
-
-  // ===== SERVICES =====
-  function initServices() {
-    const serviceCards = document.querySelectorAll(".service-card");
-    const serviceToggleButtons = document.querySelectorAll(
-      "[data-service-toggle]",
-    );
-
-    serviceToggleButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const card = button.closest(".service-card");
-        if (!card) return;
-
-        card.classList.toggle("is-open");
-
-        button.textContent = card.classList.contains("is-open")
-          ? "Show Less"
-          : "Learn More";
-      });
+      if (
+        window.scrollY >= sectionTop &&
+        window.scrollY < sectionTop + sectionHeight
+      ) {
+        current = section.getAttribute("id");
+      }
     });
 
-    if (!serviceCards.length) return;
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
 
-    const servicesObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add("is-visible");
-            }, index * 120);
-
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-      },
-    );
-
-    serviceCards.forEach((card) => {
-      servicesObserver.observe(card);
+      if (link.getAttribute("href") === `#${current}`) {
+        link.classList.add("active");
+      }
     });
   }
 
-  // ===== ABOUT =====
-  function initAboutAnimation() {
-    document.documentElement.classList.add("js");
+  updateActiveLink();
+  window.addEventListener("scroll", updateActiveLink);
+}
 
-    const aboutItems = document.querySelectorAll(".about-animate");
+// ===== SERVICES =====
+function initServices() {
+  const serviceCards = document.querySelectorAll(".service-card");
+  const serviceToggleButtons = document.querySelectorAll(
+    "[data-service-toggle]",
+  );
 
-    if (!aboutItems.length) return;
+  serviceToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".service-card");
+      if (!card) return;
 
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px",
-      },
-    );
+      card.classList.toggle("is-open");
 
-    aboutItems.forEach((item) => {
-      observer.observe(item);
+      button.textContent = card.classList.contains("is-open")
+        ? "Show Less"
+        : "Learn More";
     });
-  }
-
-  // ===== REVIEW SWIPER =====
-  function initReviewSwiper() {
-    const reviewSwiperEl = document.querySelector(".review-swiper");
-
-    if (reviewSwiperEl && typeof Swiper !== "undefined") {
-      new Swiper(".review-swiper", {
-        loop: true,
-        slidesPerView: 1,
-        speed: 700,
-        spaceBetween: 24,
-
-        pagination: {
-          el: ".review-pagination",
-          clickable: true,
-        },
-
-        navigation: {
-          nextEl: ".review-next",
-          prevEl: ".review-prev",
-        },
-      });
-    }
-  }
-
-  initPage().catch((error) => {
-    console.error("Page init failed:", error);
   });
 
+  if (!serviceCards.length) return;
+
+  const servicesObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add("is-visible");
+          }, index * 120);
+
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.2,
+    },
+  );
+
+  serviceCards.forEach((card) => {
+    servicesObserver.observe(card);
+  });
+}
+
+// ===== ABOUT =====
+function initAboutAnimation() {
+  document.documentElement.classList.add("js");
+
+  const aboutItems = document.querySelectorAll(".about-animate");
+
+  if (!aboutItems.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -40px 0px",
+    },
+  );
+
+  aboutItems.forEach((item) => {
+    observer.observe(item);
+  });
+}
+
+// ===== REVIEW SWIPER =====
+function initReviewSwiper() {
+  const reviewSwiperEl = document.querySelector(".review-swiper");
+
+  if (reviewSwiperEl && typeof Swiper !== "undefined") {
+    new Swiper(".review-swiper", {
+      loop: true,
+      slidesPerView: 1,
+      speed: 700,
+      spaceBetween: 24,
+
+      pagination: {
+        el: ".review-pagination",
+        clickable: true,
+      },
+
+      navigation: {
+        nextEl: ".review-next",
+        prevEl: ".review-prev",
+      },
+    });
+  }
+}
+
+initPage().catch((error) => {
+  console.error("Page init failed:", error);
+});
+
+document.documentElement.classList.add("js");
+
+const reviewItems = document.querySelectorAll(".review-animate");
+
+if (reviewItems.length) {
+  const reviewObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px",
+    },
+  );
+
+  reviewItems.forEach((item) => {
+    reviewObserver.observe(item);
+  });
+}
+
+function initReviewAnimation() {
   document.documentElement.classList.add("js");
 
   const reviewItems = document.querySelectorAll(".review-animate");
 
-  if (reviewItems.length) {
-    const reviewObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px",
-      },
-    );
+  if (!reviewItems.length) return;
 
-    reviewItems.forEach((item) => {
-      reviewObserver.observe(item);
-    });
-  }
+  const reviewObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px",
+    },
+  );
 
-  function initReviewAnimation() {
-    document.documentElement.classList.add("js");
-
-    const reviewItems = document.querySelectorAll(".review-animate");
-
-    if (!reviewItems.length) return;
-
-    const reviewObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px",
-      },
-    );
-
-    reviewItems.forEach((item) => {
-      reviewObserver.observe(item);
-    });
-  }
+  reviewItems.forEach((item) => {
+    reviewObserver.observe(item);
+  });
 }
