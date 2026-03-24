@@ -348,7 +348,11 @@ function initModal() {
       }
 
       try {
-        const response = await fetch("/.netlify/functions/send-telegram", {
+        const endpoint = window.location.hostname.includes("github.io")
+          ? "https://arttime-llc.netlify.app/.netlify/functions/send-telegram"
+          : "/.netlify/functions/send-telegram";
+
+        const response = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
