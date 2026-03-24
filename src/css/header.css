@@ -34,20 +34,14 @@
 
 /* ===== LOGO ===== */
 .logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  font-weight: 700;
-  font-size: 24px;
-  text-decoration: none;
   flex-shrink: 0;
 }
-
-.logo-main {
-  color: var(--white);
-}
-
-.logo-accent {
-  color: var(--primary-color);
+.logo-img {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
 /* ===== MOBILE FIRST ===== */

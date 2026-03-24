@@ -228,3 +228,140 @@
 .review-card.review-animate:nth-child(2) {
   transition-delay: 0.5s;
 }
+
+.google-reviews-box {
+  margin-top: 48px;
+  padding: 36px 28px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.08),
+    0 0 40px rgba(246, 139, 31, 0.05);
+}
+
+.google-reviews-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 🔥 header */
+.google-reviews-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+/* Google icon */
+.google-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 20px;
+  color: #4285f4;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* rating */
+.google-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.google-stars {
+  color: #fbbf24;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.google-score {
+  font-weight: 700;
+  font-size: 18px;
+  color: #1e293b;
+}
+
+/* title */
+.google-reviews-title {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* text */
+.google-reviews-text {
+  max-width: 600px;
+  margin: 0 0 26px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+/* button */
+.google-reviews-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  min-height: 52px;
+  padding: 14px 22px;
+
+  border-radius: 14px;
+  background: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+
+  box-shadow: 0 12px 26px rgba(246, 139, 31, 0.22);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.google-reviews-link:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 32px rgba(246, 139, 31, 0.28),
+    0 0 18px rgba(246, 139, 31, 0.16);
+}
+
+/* 📱 mobile */
+@media (max-width: 767px) {
+  .google-reviews-box {
+    padding: 28px 20px;
+    border-radius: 22px;
+  }
+
+  .google-reviews-title {
+    font-size: 22px;
+  }
+
+  .google-stars {
+    font-size: 16px;
+  }
+
+  .google-score {
+    font-size: 16px;
+  }
+
+  .google-reviews-link {
+    width: 100%;
+  }
+}

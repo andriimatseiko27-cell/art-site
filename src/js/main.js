@@ -36,6 +36,7 @@ async function initPage() {
   initReviewAnimation();
   initActiveNav();
   initMobileMenu();
+  initScrollTop();
 }
 
 function initMobileMenu() {
@@ -463,11 +464,21 @@ function initServices() {
       const card = button.closest(".service-card");
       if (!card) return;
 
-      card.classList.toggle("is-open");
+      const isOpen = card.classList.contains("is-open");
 
-      button.textContent = card.classList.contains("is-open")
-        ? "Show Less"
-        : "Learn More";
+      serviceCards.forEach((item) => {
+        item.classList.remove("is-open");
+
+        const itemButton = item.querySelector("[data-service-toggle]");
+        if (itemButton) {
+          itemButton.textContent = "Learn More";
+        }
+      });
+
+      if (!isOpen) {
+        card.classList.add("is-open");
+        button.textContent = "Show Less";
+      }
     });
   });
 
@@ -601,4 +612,50 @@ function initReviewAnimation() {
   reviewItems.forEach((item) => {
     reviewObserver.observe(item);
   });
+}
+
+// ===== BUTTON UP =====
+function initScrollTop() {
+  const btn = document.querySelector("[data-scroll-top]");
+  if (!btn) return;
+
+  const progressBar = btn.querySelector(".scroll-progress-bar");
+  const hero = document.querySelector("#hero");
+  const radius = 26;
+  const circumference = 2 * Math.PI * radius;
+
+  if (progressBar) {
+    progressBar.style.strokeDasharray = `${circumference}`;
+    progressBar.style.strokeDashoffset = `${circumference}`;
+  }
+
+  function updateScrollTop() {
+    const scrollTop = window.scrollY;
+    const docHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+    const offset = circumference - progress * circumference;
+
+    if (progressBar) {
+      progressBar.style.strokeDashoffset = `${offset}`;
+    }
+
+    if (scrollTop > (hero?.offsetHeight || 400)) {
+      btn.classList.add("is-visible");
+    } else {
+      btn.classList.remove("is-visible");
+    }
+  }
+
+  window.addEventListener("scroll", updateScrollTop, { passive: true });
+  window.addEventListener("resize", updateScrollTop);
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+
+  updateScrollTop();
 }

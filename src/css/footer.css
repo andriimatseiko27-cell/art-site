@@ -1,12 +1,17 @@
 .footer {
   padding: 80px 0 30px;
-  background:
+  /* background:
     radial-gradient(
       circle at 20% 20%,
       rgba(246, 139, 31, 0.08),
       transparent 40%
     ),
-    #0f172a;
+    #0f172a; */
+  background: linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.7),
+    rgba(30, 41, 59, 0.6)
+  );
   color: rgba(255, 255, 255, 0.85);
 }
 
