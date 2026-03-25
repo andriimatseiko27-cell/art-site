@@ -1,4 +1,12 @@
-# 🎨 ArtTime Website
+# 🎨 Art Time LLC Website
+
+🔗 Live Demo: https://arttime-llc.netlify.app
+
+## 📱 Features
+- Responsive design
+- Mobile menu
+- Contact form (Telegram)
+- Fast performance
 
 <p align="center">
   Modern premium renovation website built with Vite
