@@ -14,9 +14,6 @@
   overflow: hidden;
   overflow-x: hidden;
 }
-.hero {
-  margin-top: -5px;
-}
 
 @media (min-width: 768px) {
   .hero {
@@ -201,8 +198,8 @@
   .hero {
     min-height: 560px;
     background-position: 62% center;
+    margin-top: -10px;
   }
-
   .hero::before {
     background: linear-gradient(
       180deg,
