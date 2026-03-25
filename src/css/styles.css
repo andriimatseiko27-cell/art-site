@@ -25,6 +25,12 @@
   --header-bg-strong: rgba(0, 2, 5, 0.9);
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 *,
 *::before,
 *::after {

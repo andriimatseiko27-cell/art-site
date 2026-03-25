@@ -4,6 +4,7 @@
   min-height: 760px;
   display: flex;
   align-items: center;
+  padding-top: 80px;
 
   background-image: url("/img/hero-mobile.webp");
   background-size: cover;

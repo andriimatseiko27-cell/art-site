@@ -45,7 +45,17 @@
   width: auto;
   display: block;
 }
+.logo-img {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease;
+}
 
+.logo:hover .logo-img {
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+  transform: scale(1.05);
+}
 /* ===== MOBILE HEADER CONTACTS ===== */
 .mobile-header-contact {
   display: flex;
@@ -370,8 +380,12 @@
 
   .desktop-header-contact {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 12px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .contact-item {
@@ -408,4 +422,9 @@
   .contact-item {
     font-size: 14px;
   }
+}
+
+.hero {
+  margin-top: -80px; /* приблизна висота header */
+  padding-top: 160px; /* щоб контент не заліз */
 }
