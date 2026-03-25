@@ -25,7 +25,7 @@
 
 ## 📸 Preview
 
-![Preview](./preview.jpg)<!-- Можеш вставити скріншот -->
+![Preview](./preview.jpg)
 
 ```id="preview-placeholder"
 ![Preview](./preview.jpg)
