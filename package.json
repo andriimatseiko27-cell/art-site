@@ -13,5 +13,9 @@
   "devDependencies": {
     "gh-pages": "^6.1.1",
     "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "lottie-web": "^5.13.0",
+    "swiper": "^12.1.3"
   }
 }

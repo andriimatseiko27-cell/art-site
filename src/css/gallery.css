@@ -15,7 +15,9 @@
 }
 
 .gallery-swiper {
-  padding: 20px 0 50px;
+  position: relative;
+  padding: 20px 0 60px;
+  overflow: hidden;
 }
 
 .gallery .swiper-slide {
@@ -44,9 +46,71 @@
     0 0 24px rgba(246, 139, 31, 0.14);
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-  color: var(--primary-color);
+/* SWIPER ARROWS */
+.gallery-swiper .swiper-button-prev,
+.gallery-swiper .swiper-button-next {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.78);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.gallery-swiper .swiper-button-prev::after,
+.gallery-swiper .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gallery-swiper .swiper-button-prev:hover,
+.gallery-swiper .swiper-button-next:hover,
+.gallery-swiper .swiper-button-prev:focus,
+.gallery-swiper .swiper-button-next:focus {
+  transform: scale(1.08);
+  background: rgba(246, 139, 31, 0.9);
+  box-shadow: 0 0 20px rgba(246, 139, 31, 0.22);
+}
+
+.gallery-swiper .swiper-button-prev {
+  left: 12px;
+}
+
+.gallery-swiper .swiper-button-next {
+  right: 12px;
+}
+
+.gallery-swiper .swiper-button-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* SWIPER PAGINATION */
+.gallery-swiper .swiper-pagination {
+  position: relative;
+  margin-top: 24px;
+}
+
+.gallery-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: rgba(15, 23, 42, 0.25);
+  opacity: 1;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.gallery-swiper .swiper-pagination-bullet-active {
+  background: var(--primary-color);
+  transform: scale(1.15);
 }
 
 /* LIGHTBOX */
@@ -207,9 +271,46 @@
 }
 
 @media (max-width: 767px) {
+  .gallery {
+    padding: 80px 0;
+  }
+
   .gallery .container {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .gallery-title {
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+
+  .gallery-swiper {
+    padding: 20px 0 54px;
+  }
+
+  .gallery-img {
+    max-width: 100%;
+    height: 240px;
+  }
+
+  .gallery-swiper .swiper-button-prev,
+  .gallery-swiper .swiper-button-next {
+    width: 42px;
+    height: 42px;
+  }
+
+  .gallery-swiper .swiper-button-prev::after,
+  .gallery-swiper .swiper-button-next::after {
+    font-size: 16px;
+  }
+
+  .gallery-swiper .swiper-button-prev {
+    left: 8px;
+  }
+
+  .gallery-swiper .swiper-button-next {
+    right: 8px;
   }
 
   .lightbox {

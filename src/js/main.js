@@ -1,3 +1,10 @@
+import Swiper from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 import "../css/styles.css";
 
 const base = import.meta.env.BASE_URL;
@@ -28,7 +35,7 @@ async function initPage() {
 
   initGallerySwiper();
   initGalleryAnimation();
-  initLightbox();
+  initGalleryLightbox();
   initModal();
   initServices();
   initAboutAnimation();
@@ -87,32 +94,40 @@ function initMobileMenu() {
     }
   });
 }
+
 // ===== GALLERY SWIPER =====
 function initGallerySwiper() {
   const gallerySwiperEl = document.querySelector(".gallery-swiper");
 
-  if (gallerySwiperEl && typeof Swiper !== "undefined") {
-    new Swiper(".gallery-swiper", {
-      loop: true,
-      spaceBetween: 24,
-      slidesPerView: 1,
-      speed: 700,
+  if (!gallerySwiperEl) return;
 
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
+  new Swiper(".gallery-swiper", {
+    modules: [Navigation, Pagination],
+    loop: true,
+    spaceBetween: 24,
+    slidesPerView: 1,
+    speed: 700,
+    grabCursor: true,
 
-      breakpoints: {
-        768: {
-          slidesPerView: 2,
-        },
-        1024: {
-          slidesPerView: 3,
-        },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+
+    breakpoints: {
+      768: {
+        slidesPerView: 2,
       },
-    });
-  }
+      1024: {
+        slidesPerView: 3,
+      },
+    },
+  });
 }
 
 // ===== GALLERY SCROLL ANIMATION =====
@@ -144,120 +159,77 @@ function initGalleryAnimation() {
 }
 
 // ===== LIGHTBOX =====
-function initLightbox() {
-  const galleryImages = document.querySelectorAll(".gallery-img");
+function initGalleryLightbox() {
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
-  const lightboxClose = document.getElementById("lightbox-close");
-  const lightboxPrev = document.getElementById("lightbox-prev");
-  const lightboxNext = document.getElementById("lightbox-next");
+  const closeBtn = document.getElementById("lightbox-close");
+  const prevBtn = document.getElementById("lightbox-prev");
+  const nextBtn = document.getElementById("lightbox-next");
+  const galleryImages = [
+    ...document.querySelectorAll(".gallery-swiper .gallery-img"),
+  ];
 
-  let currentImageIndex = 0;
-  let touchStartX = 0;
-  let touchEndX = 0;
+  if (!lightbox || !lightboxImg || !galleryImages.length) return;
 
-  function showLightboxImage(index) {
-    if (!galleryImages.length || !lightboxImg) return;
+  let currentIndex = 0;
 
-    currentImageIndex = (index + galleryImages.length) % galleryImages.length;
+  function updateLightboxImage() {
+    const currentImg = galleryImages[currentIndex];
+    if (!currentImg) return;
 
     lightboxImg.classList.add("is-switching");
 
     setTimeout(() => {
-      lightboxImg.src = galleryImages[currentImageIndex].src;
-      lightboxImg.alt =
-        galleryImages[currentImageIndex].alt || "Expanded project image";
-    }, 120);
-
-    setTimeout(() => {
+      lightboxImg.src = currentImg.src;
+      lightboxImg.alt = currentImg.alt;
       lightboxImg.classList.remove("is-switching");
-    }, 220);
+    }, 120);
   }
 
   function openLightbox(index) {
-    if (!lightbox || !lightboxImg || !galleryImages.length) return;
-
+    currentIndex = index;
+    lightboxImg.src = galleryImages[currentIndex].src;
+    lightboxImg.alt = galleryImages[currentIndex].alt;
     lightbox.classList.add("active");
-    document.body.style.overflow = "hidden";
-
-    lightboxImg.src = galleryImages[index].src;
-    lightboxImg.alt = galleryImages[index].alt || "Expanded project image";
-    currentImageIndex = index;
+    document.body.classList.add("no-scroll");
   }
 
   function closeLightbox() {
-    if (!lightbox) return;
-
     lightbox.classList.remove("active");
-    document.body.style.overflow = "";
+    document.body.classList.remove("no-scroll");
   }
 
-  function showNextImage() {
-    showLightboxImage(currentImageIndex + 1);
+  function showNext() {
+    currentIndex = (currentIndex + 1) % galleryImages.length;
+    updateLightboxImage();
   }
 
-  function showPrevImage() {
-    showLightboxImage(currentImageIndex - 1);
+  function showPrev() {
+    currentIndex =
+      (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateLightboxImage();
   }
 
   galleryImages.forEach((img, index) => {
-    img.addEventListener("click", () => {
-      openLightbox(index);
-    });
+    img.addEventListener("click", () => openLightbox(index));
   });
 
-  if (lightboxClose) {
-    lightboxClose.addEventListener("click", closeLightbox);
-  }
+  closeBtn?.addEventListener("click", closeLightbox);
+  nextBtn?.addEventListener("click", showNext);
+  prevBtn?.addEventListener("click", showPrev);
 
-  if (lightboxNext) {
-    lightboxNext.addEventListener("click", showNextImage);
-  }
-
-  if (lightboxPrev) {
-    lightboxPrev.addEventListener("click", showPrevImage);
-  }
-
-  if (lightbox) {
-    lightbox.addEventListener("click", (event) => {
-      if (event.target === lightbox) {
-        closeLightbox();
-      }
-    });
-
-    lightbox.addEventListener("touchstart", (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-    });
-
-    lightbox.addEventListener("touchend", (event) => {
-      touchEndX = event.changedTouches[0].screenX;
-
-      const swipeDistance = touchEndX - touchStartX;
-
-      if (Math.abs(swipeDistance) > 50) {
-        if (swipeDistance < 0) {
-          showNextImage();
-        } else {
-          showPrevImage();
-        }
-      }
-    });
-  }
-
-  document.addEventListener("keydown", (event) => {
-    if (!lightbox || !lightbox.classList.contains("active")) return;
-
-    if (event.key === "Escape") {
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
       closeLightbox();
     }
+  });
 
-    if (event.key === "ArrowRight") {
-      showNextImage();
-    }
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.classList.contains("active")) return;
 
-    if (event.key === "ArrowLeft") {
-      showPrevImage();
-    }
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowRight") showNext();
+    if (event.key === "ArrowLeft") showPrev();
   });
 }
 
@@ -537,52 +509,24 @@ function initAboutAnimation() {
 function initReviewSwiper() {
   const reviewSwiperEl = document.querySelector(".review-swiper");
 
-  if (reviewSwiperEl && typeof Swiper !== "undefined") {
-    new Swiper(".review-swiper", {
-      loop: true,
-      slidesPerView: 1,
-      speed: 700,
-      spaceBetween: 24,
+  if (!reviewSwiperEl) return;
 
-      pagination: {
-        el: ".review-pagination",
-        clickable: true,
-      },
+  new Swiper(".review-swiper", {
+    modules: [Navigation, Pagination],
+    loop: true,
+    slidesPerView: 1,
+    speed: 700,
+    spaceBetween: 24,
 
-      navigation: {
-        nextEl: ".review-next",
-        prevEl: ".review-prev",
-      },
-    });
-  }
-}
-
-initPage().catch((error) => {
-  console.error("Page init failed:", error);
-});
-
-document.documentElement.classList.add("js");
-
-const reviewItems = document.querySelectorAll(".review-animate");
-
-if (reviewItems.length) {
-  const reviewObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
+    pagination: {
+      el: ".review-pagination",
+      clickable: true,
     },
-    {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px",
-    },
-  );
 
-  reviewItems.forEach((item) => {
-    reviewObserver.observe(item);
+    navigation: {
+      nextEl: ".review-next",
+      prevEl: ".review-prev",
+    },
   });
 }
 
@@ -658,3 +602,9 @@ function initScrollTop() {
 
   updateScrollTop();
 }
+
+initPage().catch((error) => {
+  console.error("Page init failed:", error);
+});
+
+document.documentElement.classList.add("js");
