@@ -179,7 +179,7 @@
 .form-submit-btn.loading .btn-text {
   opacity: 0.7;
 }
-/* Tablet */
+
 @media (max-width: 992px) {
   .backdrop {
     padding: 24px;
@@ -215,7 +215,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 767px) {
   .backdrop {
     align-items: flex-start;
@@ -261,7 +260,6 @@
   }
 }
 
-/* Small mobile */
 @media (max-width: 479px) {
   .backdrop {
     padding: 12px;
