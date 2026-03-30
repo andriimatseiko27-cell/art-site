@@ -332,7 +332,7 @@ function initModal() {
 
         const data = await response.json();
 
-        if (!response.ok || !data.ok) {
+        if (!response.ok || !data.success) {
           throw new Error(data.error || "Failed to send request");
         }
 
