@@ -33,6 +33,11 @@ async function initPage() {
   await loadPartial("review", "review.html");
   await loadPartial("footer", "footer.html");
 
+  // painting page
+  // await loadPartial("painting-content", "painting-content.html");
+
+  await loadPartial("footer", "footer.html");
+
   initGallerySwiper();
   initGalleryAnimation();
   initGalleryLightbox();
@@ -44,8 +49,18 @@ async function initPage() {
   initActiveNav();
   initMobileMenu();
   initScrollTop();
+  // initPaintingSwiper();
+  // initPaintingLightbox();
+  // initRevealAnimation();
+
+  initPageReveal();
 }
 
+function initPageReveal() {
+  requestAnimationFrame(() => {
+    document.body.classList.add("page-loaded");
+  });
+}
 function initMobileMenu() {
   const burger = document.querySelector(".burger");
   const mobileMenu = document.querySelector(".mobile-menu");
@@ -129,6 +144,41 @@ function initGallerySwiper() {
     },
   });
 }
+
+// // ===== PAINTING SWIPER =====
+// function initPaintingSwiper() {
+//   const paintingSwiperEl = document.querySelector(".painting-swiper");
+
+//   if (!paintingSwiperEl) return;
+
+//   new Swiper(".painting-swiper", {
+//     modules: [Navigation, Pagination],
+//     loop: true,
+//     spaceBetween: 24,
+//     slidesPerView: 1,
+//     speed: 700,
+//     grabCursor: true,
+
+//     navigation: {
+//       nextEl: ".painting-swiper-button-next",
+//       prevEl: ".painting-swiper-button-prev",
+//     },
+
+//     pagination: {
+//       el: ".painting-swiper-pagination",
+//       clickable: true,
+//     },
+
+//     breakpoints: {
+//       768: {
+//         slidesPerView: 2,
+//       },
+//       1024: {
+//         slidesPerView: 3,
+//       },
+//     },
+//   });
+// }
 
 // ===== GALLERY SCROLL ANIMATION =====
 function initGalleryAnimation() {
@@ -233,6 +283,80 @@ function initGalleryLightbox() {
   });
 }
 
+// // ===== PAINTING LIGHTBOX =====
+// function initPaintingLightbox() {
+//   const lightbox = document.getElementById("painting-lightbox");
+//   const lightboxImg = document.getElementById("painting-lightbox-img");
+//   const closeBtn = document.getElementById("painting-lightbox-close");
+//   const prevBtn = document.getElementById("painting-lightbox-prev");
+//   const nextBtn = document.getElementById("painting-lightbox-next");
+//   const galleryImages = [
+//     ...document.querySelectorAll(".painting-swiper .painting-gallery-img"),
+//   ];
+
+//   if (!lightbox || !lightboxImg || !galleryImages.length) return;
+
+//   let currentIndex = 0;
+
+//   function updateLightboxImage() {
+//     const currentImg = galleryImages[currentIndex];
+//     if (!currentImg) return;
+
+//     lightboxImg.classList.add("active");
+
+//     setTimeout(() => {
+//       lightboxImg.src = currentImg.src;
+//       lightboxImg.alt = currentImg.alt;
+//       lightboxImg.classList.remove("active");
+//     }, 120);
+//   }
+
+//   function openLightbox(index) {
+//     currentIndex = index;
+//     lightboxImg.src = galleryImages[currentIndex].src;
+//     lightboxImg.alt = galleryImages[currentIndex].alt;
+//     lightbox.classList.add("active");
+//     document.body.classList.add("no-scroll");
+//   }
+
+//   function closeLightbox() {
+//     lightbox.classList.remove("active");
+//     document.body.classList.remove("no-scroll");
+//   }
+
+//   function showNext() {
+//     currentIndex = (currentIndex + 1) % galleryImages.length;
+//     updateLightboxImage();
+//   }
+
+//   function showPrev() {
+//     currentIndex =
+//       (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+//     updateLightboxImage();
+//   }
+
+//   galleryImages.forEach((img, index) => {
+//     img.addEventListener("click", () => openLightbox(index));
+//   });
+
+//   closeBtn?.addEventListener("click", closeLightbox);
+//   nextBtn?.addEventListener("click", showNext);
+//   prevBtn?.addEventListener("click", showPrev);
+
+//   lightbox.addEventListener("click", (event) => {
+//     if (event.target === lightbox) {
+//       closeLightbox();
+//     }
+//   });
+
+//   document.addEventListener("keydown", (event) => {
+//     if (!lightbox.classList.contains("active")) return;
+
+//     if (event.key === "Escape") closeLightbox();
+//     if (event.key === "ArrowRight") showNext();
+//     if (event.key === "ArrowLeft") showPrev();
+//   });
+// }
 // ===== MODAL =====
 function initModal() {
   let lottieInstance = null;
@@ -391,41 +515,70 @@ function initModal() {
 
 // ===== ACTIVE NAV =====
 function initActiveNav() {
-  const sections = document.querySelectorAll(
-    "#hero, #services, #about, #gallery, #review, #footer",
-  );
   const navLinks = document.querySelectorAll(".nav-link");
+  if (!navLinks.length) return;
 
-  if (!sections.length || !navLinks.length) return;
+  const isPaintingPage = window.location.pathname.includes("painting.html");
+  const isHomePage =
+    window.location.pathname === "/" ||
+    window.location.pathname.endsWith("index.html");
 
-  function updateActiveLink() {
-    let current = "";
-
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 140;
-      const sectionHeight = section.offsetHeight;
-
-      if (
-        window.scrollY >= sectionTop &&
-        window.scrollY < sectionTop + sectionHeight
-      ) {
-        current = section.getAttribute("id");
-      }
-    });
-
+  // painting page → підсвічуємо Services
+  if (isPaintingPage) {
     navLinks.forEach((link) => {
       link.classList.remove("active");
 
-      if (link.getAttribute("href") === `#${current}`) {
+      const href = link.getAttribute("href") || "";
+      if (href.includes("#services")) {
         link.classList.add("active");
       }
     });
+
+    return;
   }
 
-  updateActiveLink();
-  window.addEventListener("scroll", updateActiveLink);
-}
+  // home page scroll spy
+  if (isHomePage) {
+    const sections = document.querySelectorAll(
+      "#hero, #services, #about, #gallery, #review, #footer",
+    );
 
+    if (!sections.length) return;
+
+    function updateActiveLink() {
+      let current = "hero";
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 140;
+        const sectionHeight = section.offsetHeight;
+
+        if (
+          window.scrollY >= sectionTop &&
+          window.scrollY < sectionTop + sectionHeight
+        ) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+
+        const href = link.getAttribute("href") || "";
+
+        if (
+          href === `#${current}` ||
+          href.endsWith(`index.html#${current}`) ||
+          href.endsWith(`/#${current}`)
+        ) {
+          link.classList.add("active");
+        }
+      });
+    }
+
+    updateActiveLink();
+    window.addEventListener("scroll", updateActiveLink);
+  }
+}
 // ===== SERVICES =====
 function initServices() {
   const serviceCards = document.querySelectorAll(".service-card");
@@ -616,3 +769,27 @@ window.addEventListener("scroll", () => {
   const header = document.querySelector(".header");
   header.classList.toggle("scrolled", window.scrollY > 50);
 });
+
+window.requestAnimationFrame(() => {
+  document.body.classList.add("page-loaded");
+});
+
+function initRevealAnimation() {
+  const elements = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    },
+  );
+
+  elements.forEach((el) => observer.observe(el));
+}
