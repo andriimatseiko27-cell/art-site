@@ -7,21 +7,38 @@
   z-index: 1000;
 
   padding: 14px 0;
+  overflow: hidden;
 
   background: linear-gradient(
     to top,
-    rgba(15, 23, 42, 0.85) 0%,
-    /* низ — темний */ rgba(15, 23, 42, 0.6) 40%,
-    rgba(15, 23, 42, 0.3) 70%,
-    rgba(15, 23, 42, 0.1) 100% /* верх — майже прозорий */
+    #050d1f 0%,
+    /* НИЗ — щільний */ #061126 25%,
+    #071733 45%,
+    /* ДО СЕРЕДИНИ темний */ rgba(7, 23, 51, 0.7) 65%,
+    /* починає світлішати */ rgba(7, 23, 51, 0.35) 80%,
+    rgba(7, 23, 51, 0.1) 92%,
+    rgba(7, 23, 51, 0) 100% /* ВЕРХ — майже прозорий */
   );
 
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  .header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(
+      to top,
+      rgba(6, 14, 34, 0.96) 0%,
+      rgba(8, 20, 48, 0.82) 28%,
+      rgba(10, 24, 58, 0.48) 55%,
+      rgba(10, 24, 58, 0.16) 78%,
+      rgba(10, 24, 58, 0) 100%
+    );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
 }
 .header.scrolled {
   background: rgba(15, 23, 42, 0.9);
@@ -52,7 +69,7 @@
   display: block;
 }
 .logo-img {
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1));
   transition:
     filter 0.3s ease,
     transform 0.3s ease;
